@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Dashboard - Fitness Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .dashboard-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .profile-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .progress {
+      height: 20px;
+    }
+    .timeline {
+      border-left: 4px solid #6f42c1;
+      margin-top: 20px;
+      padding-left: 20px;
+    }
+    .timeline-item {
+      margin-bottom: 15px;
+    }
+    .timeline-item h6 {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">Fitness Tracker</a>
+        <div class="navbar-nav ms-auto">
+          <span class="navbar-text me-3">
+            <i class="fas fa-user me-1"></i> <span id="memberName">John Doe</span>
+          </span>
+          <button class="btn btn-outline-light btn-sm" onclick="logout()">
+            <i class="fas fa-sign-out-alt me-1"></i> Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h2>Welcome Back, <span id="memberFirstName">John</span>!</h2>
+            <p>Track your fitness progress and stay on top of your health goals.</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <button class="btn btn-outline-light" onclick="showSection('dashboard')">Dashboard</button>
+            <button class="btn btn-outline-light" onclick="showSection('goals')">Goals</button>
+            <button class="btn btn-outline-light" onclick="showSection('food')">Nutrition</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Section -->
+      <div id="dashboardSection">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="dashboard-card text-center">
+              <i class="fas fa-dumbbell fa-3x text-primary mb-3"></i>
+              <h4 id="workoutsThisMonth">12</h4>
+              <p class="text-muted">Workouts This Month</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="dashboard-card text-center">
+              <i class="fas fa-fire fa-3x text-warning mb-3"></i>
+              <h4 id="streakDays">7</h4>
+              <p class="text-muted">Current Streak (Days)</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="dashboard-card text-center">
+              <i class="fas fa-bullseye fa-3x text-success mb-3"></i>
+              <h4 id="goalsAchieved">3</h4>
+              <p class="text-muted">Goals Achieved</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="dashboard-card text-center">
+              <i class="fas fa-weight fa-3x text-info mb-3"></i>
+              <h4 id="bmi">22.5</h4>
+              <p class="text-muted">Current BMI</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workout Schedule -->
+        <div class="dashboard-card">
+          <h5><i class="fas fa-calendar-alt me-2 text-primary"></i>Workout Schedule</h5>
+          <table class="table table-bordered mt-3">
+            <thead><tr><th>Day</th><th>Workout Type</th><th>Timing</th></tr></thead>
+            <tbody id="workoutSchedule">
+              <tr><td>Monday</td><td>Chest & Triceps</td><td>6:00 AM - 7:00 AM</td></tr>
+              <tr><td>Tuesday</td><td>Back & Biceps</td><td>6:00 AM - 7:00 AM</td></tr>
+              <tr><td>Wednesday</td><td>Cardio</td><td>6:30 AM - 7:30 AM</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="dashboard-card">
+          <h5><i class="fas fa-history me-2 text-success"></i>Recent Activity</h5>
+          <div id="recentActivity">
+            <ul>
+              <li>🏋️ Completed Chest Workout - 2 days ago</li>
+              <li>🔥 Burned 350 Calories - 1 day ago</li>
+              <li>🥗 Followed Meal Plan - Today</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Goals Section -->
+      <div id="goalsSection" style="display: none;">
+        <div class="dashboard-card">
+          <h5><i class="fas fa-bullseye me-2 text-success"></i>Fitness Goals</h5>
+          <p>Track your progress towards your personalized goals.</p>
+
+          <h6>Weight Loss Goal</h6>
+          <div class="progress mb-3">
+            <div class="progress-bar bg-success" style="width: 60%;">60%</div>
+          </div>
+
+          <h6>Muscle Gain Goal</h6>
+          <div class="progress mb-3">
+            <div class="progress-bar bg-info" style="width: 45%;">45%</div>
+          </div>
+
+          <h6>Stamina Improvement</h6>
+          <div class="progress mb-3">
+            <div class="progress-bar bg-warning" style="width: 70%;">70%</div>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <h6>Month 1</h6>
+              <p>Started gym & initial assessment</p>
+            </div>
+            <div class="timeline-item">
+              <h6>Month 2</h6>
+              <p>Lost 3kg, improved stamina by 20%</p>
+            </div>
+            <div class="timeline-item">
+              <h6>Month 3</h6>
+              <p>Gained visible muscle definition</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nutrition Section -->
+      <div id="foodSection" style="display: none;">
+        <div class="dashboard-card">
+          <h5><i class="fas fa-utensils me-2 text-danger"></i>Daily Nutrition Plan</h5>
+          <table class="table table-striped">
+            <thead><tr><th>Meal</th><th>Food Items</th><th>Time</th></tr></thead>
+            <tbody>
+              <tr><td>Breakfast</td><td>Oatmeal, Boiled Eggs, Green Tea</td><td>7:00 AM</td></tr>
+              <tr><td>Lunch</td><td>Grilled Chicken, Brown Rice, Salad</td><td>1:00 PM</td></tr>
+              <tr><td>Snack</td><td>Protein Shake, Nuts</td><td>5:00 PM</td></tr>
+              <tr><td>Dinner</td><td>Fish, Steamed Vegetables, Soup</td><td>8:00 PM</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const API = 'http://localhost:5000/api/member/details';
+    const token = localStorage.getItem('token');
+
+    async function loadMemberData() {
+      try {
+        const res = await fetch(API, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (res.ok) {
+          document.getElementById('memberName').textContent = data.name;
+          document.getElementById('memberFirstName').textContent = data.name.split(' ')[0];
+          document.getElementById('workoutsThisMonth').textContent = data.workoutsThisMonth;
+          document.getElementById('streakDays').textContent = data.streakDays;
+          document.getElementById('goalsAchieved').textContent = data.goalsAchieved;
+          document.getElementById('bmi').textContent = data.bmi;
+        }
+      } catch (err) {
+        console.error('Failed to load data');
+      }
+    }
+
+    function showSection(section) {
+      document.querySelectorAll('[id$="Section"]').forEach(sec => sec.style.display = 'none');
+      document.getElementById(section + 'Section').style.display = 'block';
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+
+    loadMemberData();
+  </script>
+</body>
+</html>

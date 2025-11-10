@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Fitness Tracker - Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card p-4">
+          <h3 class="mb-3">Login</h3>
+          <div id="alert"></div>
+          <form id="loginForm">
+            <div class="mb-3">
+              <label>Email</label>
+              <input type="email" id="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label>Password</label>
+              <input type="password" id="password" class="form-control" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Login</button>
+            <button class="btn btn-secondary" id="demo-register" type="button">Create Demo Users</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+const api = '/api';
+document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const res = await fetch(api + '/auth/login', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ email, password })
+  });
+  const data = await res.json();
+  if (res.ok) {
+    localStorage.setItem('ft_token', data.token);
+    localStorage.setItem('ft_user', JSON.stringify(data.user));
+    // redirect by role
+    const role = data.user.role;
+    if (role === 'owner') location.href = '/public/owner-dashboard.html';
+    else if (role === 'gym_owner') location.href = '/public/gymowner-dashboard.html';
+    else if (role === 'staff') location.href = '/public/staff-dashboard.html';
+    else location.href = '/public/member-dashboard.html';
+  } else {
+    document.getElementById('alert').innerHTML = '<div class="alert alert-danger">'+(data.message||'Login failed')+'</div>';
+  }
+});
+
+// create demo users (register) - quick helpers
+document.getElementById('demo-register').addEventListener('click', async ()=>{
+  const demo = [
+    { name: 'Platform Owner', email: 'owner@demo.com', password: 'password', role: 'owner' },
+    { name: 'Gym Owner', email: 'gymowner@demo.com', password: 'password', role: 'gym_owner' },
+    { name: 'Staff User', email: 'staff@demo.com', password: 'password', role: 'staff' },
+    { name: 'Member User', email: 'member@demo.com', password: 'password', role: 'member' }
+  ];
+  for (const u of demo) {
+    await fetch(api + '/auth/register', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(u)
+    }).catch(()=>{});
+  }
+  alert('Demo users attempted to register. Now login with member@demo.com / password');
+});
+</script>
+</body>
+</html>

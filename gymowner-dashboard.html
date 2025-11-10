@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym Owner Dashboard - Fitness Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .sidebar {
+      background: #343a40;
+      color: white;
+      height: 100vh;
+      position: fixed;
+    }
+    .sidebar .nav-link {
+      color: #adb5bd;
+      padding: 15px 20px;
+      border-left: 4px solid transparent;
+    }
+    .sidebar .nav-link:hover, .sidebar .nav-link.active {
+      color: white;
+      background: #495057;
+      border-left-color: #28a745;
+    }
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-left: 4px solid #28a745;
+    }
+    .stat-card i {
+      color: #28a745;
+      font-size: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+        <div class="position-sticky pt-3">
+          <div class="text-center mb-4">
+            <h4>Fitness Tracker</h4>
+            <small class="text-muted">Gym Owner Panel</small>
+          </div>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" onclick="showSection('members')">
+                <i class="fas fa-users me-2"></i> Members
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" onclick="showSection('attendance')">
+                <i class="fas fa-calendar-check me-2"></i> Attendance
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" onclick="logout()">
+                <i class="fas fa-sign-out-alt me-2"></i> Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
+        <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2" id="sectionTitle">Gym Owner Dashboard</h1>
+          <div>
+            <span class="btn btn-outline-success">
+              <i class="fas fa-dumbbell me-1"></i> <span id="gymName">My Gym</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboardSection">
+          <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+              <i class="fas fa-user-plus me-1"></i> Add Customer
+            </button>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-xl-3 col-md-6 mb-3">
+              <div class="stat-card">
+                <h5>Total Members</h5>
+                <h2 id="totalMembers">0</h2>
+                <i class="fas fa-users float-end"></i>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-3">
+              <div class="stat-card">
+                <h5>Today's Attendance</h5>
+                <h2 id="todayAttendance">0</h2>
+                <i class="fas fa-calendar-check float-end"></i>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-3">
+              <div class="stat-card">
+                <h5>Monthly Revenue</h5>
+                <h2 id="monthlyRevenue">0</h2>
+                <i class="fas fa-dollar-sign float-end"></i>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-3">
+              <div class="stat-card">
+                <h5>Pending Payments</h5>
+                <h2 id="pendingPayments">0</h2>
+                <i class="fas fa-clock float-end text-warning"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-success text-white">
+              <h5>Recent Members</h5>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr><th>Name</th><th>Email</th><th>Contact</th><th>Plan</th><th>Status</th></tr>
+                </thead>
+                <tbody id="membersTable">
+                  <tr><td>Ravi</td><td>ravi@example.com</td><td>9876543210</td><td>Monthly</td><td><span class="badge bg-success">Active</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Members Section -->
+        <div id="membersSection" style="display: none;">
+          <div class="card">
+            <div class="card-header bg-dark text-white">
+              <h5>Member Management</h5>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead><tr><th>Name</th><th>Email</th><th>Age</th><th>Plan</th><th>Contact</th></tr></thead>
+                <tbody id="membersList">
+                  <tr><td>Sita</td><td>sita@example.com</td><td>25</td><td>Quarterly</td><td>9998887776</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Add Customer Modal -->
+  <div class="modal fade" id="addCustomerModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">Add New Customer</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addCustomerForm">
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-control" id="memberName" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" id="memberEmail" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Age</label>
+              <input type="number" class="form-control" id="memberAge" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Gender</label>
+              <select class="form-select" id="memberGender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Contact Number</label>
+              <input type="text" class="form-control" id="memberContact" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Membership Plan</label>
+              <select class="form-select" id="memberPlan" required>
+                <option value="Monthly">Monthly</option>
+                <option value="Quarterly">Quarterly</option>
+                <option value="Yearly">Yearly</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success" id="addMemberBtn">Add Customer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Backend API endpoint (Node + MongoDB)
+    const API = 'http://localhost:5000/api/owner/add-member';
+    const token = localStorage.getItem('token');
+
+    // Add new member
+    document.getElementById('addMemberBtn').addEventListener('click', async () => {
+      const name = document.getElementById('memberName').value.trim();
+      const email = document.getElementById('memberEmail').value.trim();
+      const age = document.getElementById('memberAge').value.trim();
+      const gender = document.getElementById('memberGender').value.trim();
+      const contact = document.getElementById('memberContact').value.trim();
+      const plan = document.getElementById('memberPlan').value.trim();
+
+      if (!name || !email || !age || !gender || !contact || !plan) {
+        alert('⚠️ Please fill all fields!');
+        return;
+      }
+
+      try {
+        const res = await fetch(API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ name, email, age, gender, contact, plan })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert(`✅ Customer Added Successfully!\nName: ${name}`);
+          document.getElementById('addCustomerForm').reset();
+          const modal = bootstrap.Modal.getInstance(document.getElementById('addCustomerModal'));
+          modal.hide();
+        } else {
+          alert(`❌ ${data.msg || 'Failed to add customer'}`);
+        }
+      } catch (err) {
+        alert('⚠️ Server Error! Please try again.');
+      }
+    });
+
+    // Section Navigation
+    function showSection(section) {
+      document.querySelectorAll('[id$="Section"]').forEach(sec => sec.style.display = 'none');
+      document.getElementById(section + 'Section').style.display = 'block';
+      document.getElementById('sectionTitle').textContent = section.charAt(0).toUpperCase() + section.slice(1);
+    }
+
+    // Logout
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>
